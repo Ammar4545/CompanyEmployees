@@ -1,3 +1,4 @@
+using Contract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyEmployees.Controllers
@@ -12,22 +13,23 @@ namespace CompanyEmployees.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly ILoggerManager _LoggerManager;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ILoggerManager loggerManager)
         {
             _logger = logger;
+            _LoggerManager = loggerManager;
         }
 
+       
+
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<string> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            _LoggerManager.LogInfo("Here is info message from our values controller.");
+            _LoggerManager.LogDebug("Here is debug message from our values controller.");
+            _LoggerManager.LogWarn("Here is warn message from our values controller.");
+            _LoggerManager.LogError("Here is an error message from our values controller.");
+            return new string[] { "value1", "value2" };
         }
     }
 }
