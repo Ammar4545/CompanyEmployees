@@ -32,7 +32,8 @@ namespace CompanyEmployees.Extensions
             services.AddScoped<IServiceManager, ServiceManager>();
 
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
-            services.AddDbContext< RepositoryContext> (options =>
+            services.AddDbContext<RepositoryContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("sqlconnection")));
+
     }
 }

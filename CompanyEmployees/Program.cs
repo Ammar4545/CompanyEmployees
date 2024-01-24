@@ -1,4 +1,5 @@
 using CompanyEmployees.Extensions;
+using Contract;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
 using Presentation;
@@ -21,18 +22,28 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 // It allows your API project to dynamically discover and include controllers from another assembly at runtime.
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+builder.Services.AddAutoMapper(typeof(Program));
+
+
 
 var app = builder.Build();
 
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigureExceptionHandler(logger);
+
+if (app.Environment.IsProduction()) app.UseHsts();
+
+#region
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage();
 }
 else
 {
     app.UseHsts();//adds HTTP Strict Transport Security (HSTS) headers to the responses,
                   //instructing browsers to enforce secure connections over HTTPS.
 }
+#endregion
 
 // Configure the HTTP request pipeline.
 

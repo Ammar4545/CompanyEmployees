@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Models;
+using Shared.DTOs;
+using AutoMapper;
 
 namespace Service
 {
@@ -13,27 +15,23 @@ namespace Service
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
+        private readonly IMapper _mapper;
 
-        public CompanyService(IRepositoryManager repository , ILoggerManager logger)
+        public CompanyService(IRepositoryManager repository , ILoggerManager logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public IEnumerable<Company> GetAllCompanies(bool trackChanges)
+        public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)
         {
-            try
-            {
-                var companies = _repository.Company.GetAllCompanies(trackChanges);
-                return companies;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"there is something wrong in the" +
-                                   $" {nameof(GetAllCompanies)} service method {ex}");
-                throw;
-                
-            }
+            
+            var companies = _repository.Company.GetAllCompanies(trackChanges);
+
+            var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
+            return companiesDto;
+ 
         }
        
     }
