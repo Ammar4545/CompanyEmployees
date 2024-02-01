@@ -23,9 +23,10 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 // It allows your API project to dynamically discover and include controllers from another assembly at runtime.
 // add extra configuration that enable the server to format the XML response when the client tries negotiating for it.
 builder.Services.AddControllers(config =>
-     {config.RespectBrowserAcceptHeader = true;})
+     { config.RespectBrowserAcceptHeader = true; })
     .AddXmlDataContractSerializerFormatters()
-    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
+    .AddCustomCSVFormatter();
 builder.Services.AddAutoMapper(typeof(Program));
 
 
