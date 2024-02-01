@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 namespace Shared.DTOs
 {
     public record CompanyDto
-    (Guid Id  , string Name , string FullAddress );
+    {
+        public Guid Id { get; set; }
+        public string? Name { get; set; }
+        public string? FullAddress { get; set; }
+        
+    }
     
 }
