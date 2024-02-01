@@ -18,6 +18,7 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
+
 // this line is adding controllers from the specified assembly to the API project.
 // It allows your API project to dynamically discover and include controllers from another assembly at runtime.
 builder.Services.AddControllers()
@@ -34,15 +35,15 @@ app.ConfigureExceptionHandler(logger);
 if (app.Environment.IsProduction()) app.UseHsts();
 
 #region
-if (app.Environment.IsDevelopment())
-{
-    //app.UseDeveloperExceptionPage();
-}
-else
-{
-    app.UseHsts();//adds HTTP Strict Transport Security (HSTS) headers to the responses,
-                  //instructing browsers to enforce secure connections over HTTPS.
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseDeveloperExceptionPage();
+//}
+//else
+//{
+//    app.UseHsts();//adds HTTP Strict Transport Security (HSTS) headers to the responses,
+//                  //instructing browsers to enforce secure connections over HTTPS.
+//}
 #endregion
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entities.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contract;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,17 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult GetCompanies()
         {
-            //throw new Exception("exeption"); 
+           
             var companies = _service.CompanyService.GetAllCompanies(trackChanges: false);
             return Ok(companies);
+        }
+
+        [HttpGet("{id:guid}")]
+        public IActionResult GetCompany(Guid id)
+        {
+            //throw new Exception("ther taet");
+            var company = _service.CompanyService.GetCompany(id, trackChanges:false);
+            return Ok(company);
         }
     }
 }
