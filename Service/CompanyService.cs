@@ -9,6 +9,7 @@ using Entities.Models;
 using Shared.DTOs;
 using AutoMapper;
 using Entities.Exceptions;
+using Shared.DTOs.Incoming;
 
 namespace Service
 {
@@ -23,6 +24,18 @@ namespace Service
             _repository = repository;
             _logger = logger;
             _mapper = mapper;
+        }
+
+        public CompanyDto CreateCompany(CompanyForCreationDto company)
+        {
+            var companyEntity=_mapper.Map<Company>(company);
+
+            _repository.Company.CreateCompany(companyEntity);
+            _repository.Save();
+
+            var companyToReturn=_mapper.Map<CompanyDto>(companyEntity);
+
+            return companyToReturn;
         }
 
         public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)

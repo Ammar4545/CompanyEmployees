@@ -1,6 +1,7 @@
 ﻿using Entities.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contract;
+using Shared.DTOs.Incoming;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,29 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult GetCompanies()
         {
-           
+
             var companies = _service.CompanyService.GetAllCompanies(trackChanges: false);
             return Ok(companies);
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}", Name = "CompanyById")]
         public IActionResult GetCompany(Guid id)
         {
-            //throw new Exception("ther taet");
-            var company = _service.CompanyService.GetCompany(id, trackChanges:false);
+            var company = _service.CompanyService.GetCompany(id, trackChanges: false);
             return Ok(company);
+        }
+
+        [HttpPost]
+        public IActionResult CreateCompany([FromBody] CompanyForCreationDto company)
+        {
+            if (company is null)
+            {
+                return BadRequest("CompanyForCreationDto is null");
+            }
+
+            var createdCompany = _service.CompanyService.CreateCompany(company);
+
+            return CreatedAtRoute("CompanyById", new { Id = createdCompany.Id }, createdCompany);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities.Models;
 using Shared.DTOs;
+using Shared.DTOs.Incoming;
 
 namespace CompanyEmployees
 {
@@ -13,6 +14,8 @@ namespace CompanyEmployees
                            opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
 
             CreateMap<Employee, EmployeeDto>();
+
+            CreateMap<CompanyForCreationDto, Company>();
                 
         }
     }
