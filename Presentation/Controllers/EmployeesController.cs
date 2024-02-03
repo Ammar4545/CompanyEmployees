@@ -20,10 +20,17 @@ namespace Presentation.Controllers
         public EmployeesController(IServiceManager service) => _service = service;
 
         [HttpGet("{id:guid}", Name= "GetEmployeeForCompany")]
-        public IActionResult GetEmployeesForCompany(Guid Companyid, Guid id)
+        public IActionResult GetEmployeeForCompany(Guid Companyid, Guid id)
         {
             var employee = _service.EmployeeService.GetEmployee(Companyid,id, trackChanges: false);
             return Ok(employee);
+        }
+
+        [HttpGet]
+        public IActionResult GetEmployeesForCompany(Guid companyId)
+        {
+            var employees = _service.EmployeeService.GetEmployees(companyId, trackChanges: false);
+            return Ok(employees);
         }
 
         [HttpPost]
