@@ -1,4 +1,5 @@
 ﻿using Shared.DTOs;
+using Shared.DTOs.Incoming;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Service.Contract
     {
         IEnumerable<EmployeeDto> GetEmployees(Guid companyId , bool trackChanges);
         EmployeeDto GetEmployee(Guid companyID, Guid id, bool trackChanges);
+        EmployeeDto CreateEmployeeForCompany(Guid companyId, EmployeeForCreationDto employeeForCreation, bool trackChanges);
     }
 }

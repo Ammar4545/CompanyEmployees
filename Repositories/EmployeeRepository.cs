@@ -18,6 +18,12 @@ namespace Repositories
             _context = context;
         }
 
+        public void CreateEmployeeForCompany(Guid companyId, Employee employee)
+        {
+            employee.CompanyId = companyId;
+            Create(employee);
+        }
+
         public Employee GetEmployee(Guid companyId, Guid id, bool trackChanges)=>
             FindByCondition(c => c.CompanyId.Equals(companyId)&& c.Id.Equals(id) , trackChanges).SingleOrDefault();
         public IEnumerable<Employee> GetEmployees(Guid companyId, bool trackChanges) =>
