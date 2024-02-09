@@ -1,5 +1,6 @@
 ﻿using Entities.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ModelBinders;
 using Service.Contract;
 using Shared.DTOs.Incoming;
 using System;
@@ -44,6 +45,21 @@ namespace Presentation.Controllers
             var createdCompany = _service.CompanyService.CreateCompany(company);
 
             return CreatedAtRoute("CompanyById", new { Id = createdCompany.Id }, createdCompany);
+        }
+
+        [HttpPost("collection")]
+        public IActionResult CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto>? companyCollection)
+        {
+            var result = _service.CompanyService.CreateCompanyCollection(companyCollection);
+            var test = result.ids;
+            return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
+        }
+
+        [HttpGet("collections/({ids})", Name = "CompanyCollection")]
+        public IActionResult GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
+        {
+            var companies = _service.CompanyService.GetByIds(ids, trackChanges: false);
+            return Ok(companies);
         }
     }
 }

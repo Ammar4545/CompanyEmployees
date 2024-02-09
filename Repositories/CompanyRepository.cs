@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-    public class CompanyRepository : RepositoryBase<Company> , ICompanyRepository
+    public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {
         private readonly RepositoryContext _context;
 
@@ -23,7 +23,8 @@ namespace Repositories
         public IEnumerable<Company> GetAllCompanies(bool trackChanges)=>
             FindAll(trackChanges).OrderBy(c => c.Name).ToList();
 
-
+        public IEnumerable<Company> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
+            FindByCondition(a => ids.Contains(a.Id), trackChanges);
 
         public Company GetCompany(Guid companyId, bool trackChanges) =>
             FindByCondition(c => c.Id.Equals(companyId), trackChanges).SingleOrDefault();
