@@ -61,5 +61,13 @@ namespace Presentation.Controllers
             var companies = _service.CompanyService.GetByIds(ids, trackChanges: false);
             return Ok(companies);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCompany(Guid id)
+        {
+            _service.CompanyService.DeleteCompany(id, false);
+
+            return NoContent();
+        }
     }
 }
