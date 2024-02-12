@@ -53,5 +53,15 @@ namespace Presentation.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateEmployeeForCompany
+            (Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employeeForUpdateDto)
+        {
+            _service.EmployeeService.UpdateEmployeeForCompany
+                (companyId, id, employeeForUpdateDto, compTrackChanges: false, empTrackChanges: true);
+
+            return NoContent();
+        }
     }
 }
