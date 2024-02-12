@@ -38,9 +38,12 @@ namespace Presentation.Controllers
         public IActionResult CreateEmployeeForCompany(Guid CompanyId, [FromBody]EmployeeForCreationDto employee)
         {
             if (employee is null)
-            {
                 return BadRequest("EmployeeForCreationDto is null");
-            }
+            
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            
 
             var employeeToReturn = _service.EmployeeService.CreateEmployeeForCompany(CompanyId, employee, false);
 
@@ -59,6 +62,9 @@ namespace Presentation.Controllers
         public IActionResult UpdateEmployeeForCompany
             (Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employeeForUpdateDto)
         {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             _service.EmployeeService.UpdateEmployeeForCompany
                 (companyId, id, employeeForUpdateDto, compTrackChanges: false, empTrackChanges: true);
 
