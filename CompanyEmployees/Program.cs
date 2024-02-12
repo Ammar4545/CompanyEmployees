@@ -2,6 +2,8 @@ using CompanyEmployees.Extensions;
 using Contract;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
 using NLog;
 using Presentation;
 
@@ -27,14 +29,31 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 { 
     options.SuppressModelStateInvalidFilter = true;
 });
+
+#region
+//we are creating a local function. This function configures support for JSON Patch using
+//Newtonsoft.Json while leaving the other formatters unchanged.
+#endregion
+NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
+    new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
+    .Services.BuildServiceProvider().GetRequiredService<IOptions<MvcOptions>>()
+    .Value.InputFormatters.OfType<NewtonsoftJsonPatchInputFormatter>().First();
+
 builder.Services.AddControllers(config =>
-     { config.RespectBrowserAcceptHeader = true; })
-    .AddXmlDataContractSerializerFormatters()
-    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
-    .AddCustomCSVFormatter();
+{
+    config.RespectBrowserAcceptHeader = true;
+    config.ReturnHttpNotAcceptable = true;
+    config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+}).AddXmlDataContractSerializerFormatters();
+
+    // { config.RespectBrowserAcceptHeader = true; })
+    //.AddXmlDataContractSerializerFormatters()
+    //.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
+    //.AddCustomCSVFormatter();
+
 builder.Services.AddAutoMapper(typeof(Program));
 
-
+//builder.Services.AddMvc().AddNewtonsoftJson();
 
 var app = builder.Build();
 
