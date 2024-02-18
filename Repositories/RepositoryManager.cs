@@ -24,9 +24,9 @@ namespace Repositories
 
         public ICompanyRepository Company => _companyContext.Value;
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

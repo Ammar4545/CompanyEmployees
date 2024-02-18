@@ -20,63 +20,63 @@ namespace Presentation.Controllers
         public CompaniesController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public IActionResult GetCompanies()
+        public async Task<IActionResult> GetCompanies()
         {
 
-            var companies = _service.CompanyService.GetAllCompanies(trackChanges: false);
+            var companies =await _service.CompanyService.GetAllCompaniesAsync(trackChanges: false);
             return Ok(companies);
         }
 
         [HttpGet("{id:guid}", Name = "CompanyById")]
-        public IActionResult GetCompany(Guid id)
+        public async Task<IActionResult> GetCompany(Guid id)
         {
-            var company = _service.CompanyService.GetCompany(id, trackChanges: false);
+            var company = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
             return Ok(company);
         }
 
         [HttpPost]
-        public IActionResult CreateCompany([FromBody] CompanyForCreationDto company)
+        public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
         {
             if (company is null)
             {
                 return BadRequest("CompanyForCreationDto is null");
             }
 
-            var createdCompany = _service.CompanyService.CreateCompany(company);
+            var createdCompany =await _service.CompanyService.CreateCompanyAsync(company);
 
             return CreatedAtRoute("CompanyById", new { Id = createdCompany.Id }, createdCompany);
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto>? companyCollection)
+        public async Task<IActionResult> CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto>? companyCollection)
         {
-            var result = _service.CompanyService.CreateCompanyCollection(companyCollection);
+            var result =await _service.CompanyService.CreateCompanyCollectionAsync(companyCollection);
             var test = result.ids;
             return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
         }
 
         [HttpGet("collections/({ids})", Name = "CompanyCollection")]
-        public IActionResult GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
+        public async Task<IActionResult> GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
-            var companies = _service.CompanyService.GetByIds(ids, trackChanges: false);
+            var companies =await _service.CompanyService.GetByIdsAsync(ids, trackChanges: false);
             return Ok(companies);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCompany(Guid id)
+        public async Task<IActionResult> DeleteCompany(Guid id)
         {
-            _service.CompanyService.DeleteCompany(id, false);
+            await _service.CompanyService.DeleteCompanyAsync(id, false);
 
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto companyForUpdate )
+        public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto companyForUpdate )
         {
             if (companyForUpdate is null)
                 return BadRequest("CompanyForUpdateDto object is null");
 
-            _service.CompanyService.UpdateCompany(id, companyForUpdate, true);
+            await _service.CompanyService.UpdateCompanyAsync(id, companyForUpdate, true);
 
             return NoContent();
         }

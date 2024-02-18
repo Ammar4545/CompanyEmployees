@@ -9,8 +9,8 @@ namespace Contract
 {
     public interface IEmployeeRepository
     {
-        IEnumerable<Employee> GetEmployees(Guid companyID, bool trackChanges);
-        Employee GetEmployee(Guid companyID, Guid id, bool trackChanges);
+        Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyID, bool trackChanges);
+        Task<Employee> GetEmployeeAsync(Guid companyID, Guid id, bool trackChanges);
         void CreateEmployeeForCompany(Guid companyId, Employee employee);
         void DeleteEmployee(Employee employee);
     }

@@ -21,21 +21,21 @@ namespace Presentation.Controllers
         public EmployeesController(IServiceManager service) => _service = service;
 
         [HttpGet("{id:guid}", Name= "GetEmployeeForCompany")]
-        public IActionResult GetEmployeeForCompany(Guid Companyid, Guid id)
+        public async Task<IActionResult> GetEmployeeForCompany(Guid Companyid, Guid id)
         {
-            var employee = _service.EmployeeService.GetEmployee(Companyid,id, trackChanges: false);
+            var employee =await _service.EmployeeService.GetEmployeeAsync(Companyid,id, trackChanges: false);
             return Ok(employee);
         }
 
         [HttpGet]
-        public IActionResult GetEmployeesForCompany(Guid companyId)
+        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
         {
-            var employees = _service.EmployeeService.GetEmployees(companyId, trackChanges: false);
+            var employees =await _service.EmployeeService.GetEmployeesAsync(companyId, trackChanges: false);
             return Ok(employees);
         }
 
         [HttpPost]
-        public IActionResult CreateEmployeeForCompany(Guid CompanyId, [FromBody]EmployeeForCreationDto employee)
+        public async Task<IActionResult> CreateEmployeeForCompany(Guid CompanyId, [FromBody]EmployeeForCreationDto employee)
         {
             if (employee is null)
                 return BadRequest("EmployeeForCreationDto is null");
@@ -45,40 +45,40 @@ namespace Presentation.Controllers
                 return UnprocessableEntity(ModelState);
             
 
-            var employeeToReturn = _service.EmployeeService.CreateEmployeeForCompany(CompanyId, employee, false);
+            var employeeToReturn =await _service.EmployeeService.CreateEmployeeForCompanyAsync(CompanyId, employee, false);
 
             return CreatedAtRoute("GetEmployeeForCompany", new {CompanyId,id = employeeToReturn.Id}, employeeToReturn);
         }
 
         [HttpDelete("{id:guid}")]
-        public IActionResult DeleteEmployeeForCompany(Guid companyId, Guid id)
+        public async Task<IActionResult> DeleteEmployeeForCompany(Guid companyId, Guid id)
         {
-            _service.EmployeeService.DeleteEmployeeForCompany(companyId, id, false);
+            await _service.EmployeeService.DeleteEmployeeForCompanyAsync(companyId, id, false);
 
             return NoContent();
         }
 
         [HttpPut("{id:guid}")]
-        public IActionResult UpdateEmployeeForCompany
+        public async Task<IActionResult> UpdateEmployeeForCompany
             (Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employeeForUpdateDto)
         {
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            _service.EmployeeService.UpdateEmployeeForCompany
+            await _service.EmployeeService.UpdateEmployeeForCompanyAsync
                 (companyId, id, employeeForUpdateDto, compTrackChanges: false, empTrackChanges: true);
 
             return NoContent();
         }
 
         [HttpPatch("{id:guid}")]
-        public IActionResult PartiallyUpdateEmployeeForCompany
+        public async Task<IActionResult> PartiallyUpdateEmployeeForCompany
             (Guid companyId, Guid id, [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
         {
             if (patchDoc is null) return 
                 BadRequest("patchDoc object sent from client is null.");
 
-            var result = _service.EmployeeService.GetEmployeeForPatch(companyId, id, false, true);
+            var result =await _service.EmployeeService.GetEmployeeForPatch(companyId, id, false, true);
 
             patchDoc.ApplyTo(result.employeeToPatch, ModelState);
 
@@ -87,7 +87,7 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            _service.EmployeeService.SaveChangesForPatch(result.employeeToPatch, result.employeeEntity);
+            await _service.EmployeeService.SaveChangesForPatch(result.employeeToPatch, result.employeeEntity);
 
             return NoContent();
         }
