@@ -1,5 +1,6 @@
 ﻿using Entities.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ActionFilters;
 using Presentation.ModelBinders;
 using Service.Contract;
 using Shared.DTOs.Incoming;
@@ -35,13 +36,9 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
         {
-            if (company is null)
-            {
-                return BadRequest("CompanyForCreationDto is null");
-            }
-
             var createdCompany =await _service.CompanyService.CreateCompanyAsync(company);
 
             return CreatedAtRoute("CompanyById", new { Id = createdCompany.Id }, createdCompany);
