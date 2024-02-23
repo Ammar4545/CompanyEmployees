@@ -15,7 +15,7 @@ namespace Shared.RequestParameters
             {
                 TotalCount = count,
                 PageSize = pageSize,
-                CurrentPage = pageNumber,
+                CurrentPage = pageNumber ,
                 TotalPages = count / pageSize
             };
             AddRange(items);
