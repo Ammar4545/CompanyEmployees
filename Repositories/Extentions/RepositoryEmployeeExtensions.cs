@@ -1,4 +1,8 @@
 ﻿using Entities.Models;
+using System.Linq.Dynamic.Core;
+using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
+using System.Text;
 
 namespace Repositories.Extensions
 {
@@ -15,5 +19,16 @@ namespace Repositories.Extensions
 
             return employees.Where(e => e.Name.ToLower().Contains(lowerCaseTerm));
         }
+
+        //public static IQueryable<Employee> Sort(this IQueryable<Employee> employees, string OrderByQueryString)
+        //{
+        //    if (string.IsNullOrEmpty(OrderByQueryString))
+        //        return employees.OrderBy(e => e.Name);
+
+        //    var orderParam = OrderByQueryString.Trim().Split(",");
+
+        //    var propertyInfos = typeof(Employee).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        //    var orderQueryBuilder = new StringBuilder();
+        //}
     }
 }
