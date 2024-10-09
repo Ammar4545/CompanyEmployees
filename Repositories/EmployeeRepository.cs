@@ -39,6 +39,7 @@ namespace Repositories
                 .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
                 .Search(employeeParameters.SearchItem)
                 .OrderBy(e => e.Name)
+                .Sort(employeeParameters.OrderBy)
                 .ToListAsync();
 
             return PagedList<Employee>.ToPageList(employee, employeeParameters.PageNumber, employeeParameters.PageSize);
