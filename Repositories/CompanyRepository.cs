@@ -18,7 +18,7 @@ namespace Repositories
             _context = context;
         }
 
-        public void CreateCompany(Company company) =>
+        public void CreateCompany(Company company) => 
             Create(company);
 
         public void DeleteCompany(Company company)=>
